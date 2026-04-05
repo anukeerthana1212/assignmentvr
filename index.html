@@ -14,7 +14,8 @@ body { margin: 0; overflow: hidden; }
 
 <body>
 
-<a-scene cursor="rayOrigin: mouse" raycaster="objects: .clickable">
+<a-scene fog="type: exponential; color: #0a4f6e; density: 0.08"
+         cursor="rayOrigin: mouse" raycaster="objects: .clickable">
 
 <!-- ASSETS -->
 <a-assets>
@@ -24,11 +25,11 @@ body { margin: 0; overflow: hidden; }
 </a-assets>
 
 <!-- UNDERWATER SKY -->
-<a-sky color="#00334d"></a-sky>
+<a-sky color="#0a4f6e"></a-sky>
 
 <!-- LIGHTING -->
-<a-light type="ambient" intensity="0.7" color="#66ccff"></a-light>
-<a-light type="directional" intensity="0.6" position="0 10 5" color="#99e6ff"></a-light>
+<a-light type="ambient" intensity="0.9" color="#88dfff"></a-light>
+<a-light type="directional" intensity="0.5" position="0 10 5" color="#cceeff"></a-light>
 
 <!-- CAMERA -->
 <a-camera position="0 2 10">
@@ -53,16 +54,16 @@ body { margin: 0; overflow: hidden; }
     <a-gltf-model src="#clownFishModel"
         class="clickable"
         position="2 1 -2"
-        scale="10 10 10"
+        scale="5 5 5"
         animation="property: position; dir: alternate; dur: 5000; loop: true; to: -2 1 -4">
     </a-gltf-model>
 
-    <!-- OCTOPUS (FIXED VISIBILITY) -->
+    <!-- OCTOPUS (FIXED SIZE & VISIBILITY) -->
     <a-gltf-model id="octopusModelEntity"
         src="#octopusModel"
         class="clickable"
-        position="0 1 -3"
-        scale="5 5 5"
+        position="0 0.5 -3"
+        scale="3 3 3"
         animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
     </a-gltf-model>
 
@@ -111,7 +112,7 @@ document.querySelectorAll('a-gltf-model').forEach(model => {
 
             if (node.isMesh) {
 
-                // Skip octopus model
+                // Skip octopus
                 if (model.id === "octopusModelEntity") return;
 
                 const box = new THREE.Box3().setFromObject(node);
