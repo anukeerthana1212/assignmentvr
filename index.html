@@ -14,7 +14,7 @@ body { margin: 0; overflow: hidden; }
 
 <body>
 
-<a-scene fog="type: exponential; color: #0a4f6e; density: 0.08"
+<a-scene fog="type: exponential; color: #0a4f6e; density: 0.12"
          cursor="rayOrigin: mouse" raycaster="objects: .clickable">
 
 <!-- ASSETS -->
@@ -24,12 +24,12 @@ body { margin: 0; overflow: hidden; }
     <a-asset-item id="doryModel" src="baby_dory_in_finding_dory.glb"></a-asset-item>
 </a-assets>
 
-<!-- UNDERWATER SKY -->
-<a-sky color="#0a4f6e"></a-sky>
+<!-- SKY (brighter ocean tone) -->
+<a-sky color="#1e6f8f"></a-sky>
 
-<!-- LIGHTING -->
-<a-light type="ambient" intensity="0.9" color="#88dfff"></a-light>
-<a-light type="directional" intensity="0.5" position="0 10 5" color="#cceeff"></a-light>
+<!-- LIGHTING (more natural underwater) -->
+<a-light type="ambient" intensity="1.0" color="#a8e6ff"></a-light>
+<a-light type="directional" intensity="0.6" position="0 10 5" color="#ffffff"></a-light>
 
 <!-- CAMERA -->
 <a-camera position="0 2 10">
@@ -37,7 +37,7 @@ body { margin: 0; overflow: hidden; }
 </a-camera>
 
 <!-- WATER FLOOR -->
-<a-plane rotation="-90 0 0" width="100" height="100" color="#001a26"></a-plane>
+<a-plane rotation="-90 0 0" width="100" height="100" color="#013220"></a-plane>
 
 <!-- FISH ENVIRONMENT -->
 <a-entity position="0 2 -5">
@@ -50,20 +50,21 @@ body { margin: 0; overflow: hidden; }
         animation="property: position; dir: alternate; dur: 4000; loop: true; to: -3 4 -2">
     </a-gltf-model>
 
-    <!-- CLOWN FISH -->
+    <!-- CLOWN FISH (FIXED SIZE) -->
     <a-gltf-model src="#clownFishModel"
         class="clickable"
         position="2 1 -2"
-        scale="5 5 5"
+        scale="8 8 8"
         animation="property: position; dir: alternate; dur: 5000; loop: true; to: -2 1 -4">
     </a-gltf-model>
 
-    <!-- BABY DORY (NEW MODEL) -->
+    <!-- BABY DORY (FORCED VISIBILITY FIX) -->
     <a-gltf-model id="doryModelEntity"
         src="#doryModel"
         class="clickable"
         position="0 1 -3"
-        scale="2 2 2"
+        scale="8 8 8"
+        rotation="0 180 0"
         animation="property: position; dir: alternate; dur: 6000; loop: true; to: 2 1 -5">
     </a-gltf-model>
 
@@ -100,7 +101,7 @@ document.querySelector('a-scene').addEventListener('loaded', () => {
 });
 
 
-// REMOVE LARGE UNWANTED MESHES (APPLIES TO ALL NOW)
+// REMOVE LARGE UNWANTED MESHES (BUT KEEP DORY SAFE)
 document.querySelectorAll('a-gltf-model').forEach(model => {
 
     model.addEventListener('model-loaded', () => {
@@ -111,6 +112,9 @@ document.querySelectorAll('a-gltf-model').forEach(model => {
         obj.traverse((node) => {
 
             if (node.isMesh) {
+
+                // Skip Dory (important fix)
+                if (model.id === "doryModelEntity") return;
 
                 const box = new THREE.Box3().setFromObject(node);
                 const size = new THREE.Vector3();
