@@ -49,7 +49,7 @@ body { margin: 0; overflow: hidden; }
         animation="property: position; dir: alternate; dur: 4000; loop: true; to: -3 4 -2">
     </a-gltf-model>
 
-    <!-- CLOWN FISH (FIXED SIZE) -->
+    <!-- CLOWN FISH -->
     <a-gltf-model src="#clownFishModel"
         class="clickable"
         position="2 1 -2"
@@ -58,10 +58,11 @@ body { margin: 0; overflow: hidden; }
     </a-gltf-model>
 
     <!-- OCTOPUS (FIXED VISIBILITY) -->
-    <a-gltf-model src="#octopusModel"
+    <a-gltf-model id="octopusModelEntity"
+        src="#octopusModel"
         class="clickable"
-        position="0 0 -2"
-        scale="2 2 2"
+        position="0 1 -3"
+        scale="10 10 10"
         animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
     </a-gltf-model>
 
@@ -98,7 +99,7 @@ document.querySelector('a-scene').addEventListener('loaded', () => {
 });
 
 
-// REMOVE LARGE UNWANTED MESHES
+// REMOVE LARGE UNWANTED MESHES (EXCEPT OCTOPUS)
 document.querySelectorAll('a-gltf-model').forEach(model => {
 
     model.addEventListener('model-loaded', () => {
@@ -109,6 +110,9 @@ document.querySelectorAll('a-gltf-model').forEach(model => {
         obj.traverse((node) => {
 
             if (node.isMesh) {
+
+                // Skip octopus model
+                if (model.id === "octopusModelEntity") return;
 
                 const box = new THREE.Box3().setFromObject(node);
                 const size = new THREE.Vector3();
